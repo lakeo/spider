@@ -1,0 +1,56 @@
+{# -*- mode: jinja2 -*- #}
+{% macro sidebar_link(endpoint, text, kwargs=None, label_cls=None) %}
+  {% set kwargs = kwargs or {} %}
+  <li {% if request.endpoint.endswith(endpoint) and request.view_args == kwargs %}class="active"{% endif %}>
+    <a href="{{ url_for(endpoint, **kwargs) }}">
+      <i class="fa fa-circle-o"></i> {{text}}
+      {% if label_cls %}
+      <span class="{{label_cls}} label label-primary pull-right"></span>
+      {% endif %}
+    </a>
+
+  </li>
+{% endmacro %}
+
+{% macro render_select_options(value, opts) %}
+  <option value="" {% if not name %}selected{% endif %}>所有</option>
+
+  {% for pair in opts %}
+    {% if pair[1] and not pair[2] %}
+      {% set name = pair[0] %}
+      {% set display_name = pair[1] %}
+    {% else %}
+      {% set name = pair %}
+      {% set display_name = pair %}
+    {% endif %}
+
+    <option value="{{name}}" {% if name == value%}selected{% endif %}>{{display_name}}</option>
+  {% endfor %}
+{% endmacro %}
+
+{% macro render_multi_select_options(values, opts) %}
+  <option value="" >所有</option>
+
+  {% for pair in opts %}
+    {% if pair[1] and not pair[2] %}
+      {% set name = pair[0] %}
+      {% set display_name = pair[1] %}
+    {% else %}
+      {% set name = pair %}
+      {% set display_name = pair %}
+    {% endif %}
+    {% set checked = False %}
+
+    <option value="{{name}}"
+
+    {%if values%}
+      {% for value in values %}
+        {%if value == name %}
+          selected
+        {%endif%}
+      {% endfor %}
+    {% endif%}
+
+    >{{display_name}}</option>
+  {% endfor %}
+{% endmacro %}
