@@ -18,6 +18,14 @@ class CommonColumn:
 class Base(CommonColumn, db.Model):
     __abstract__ = True
 
+    @classmethod
+    def create(cls, **kwargs):
+        obj = cls(**kwargs)
+        db.session.add(obj)
+        db.session.flush([obj])
+
+        return obj
+
     def inc(self, column, cnt=1):
         value = getattr(self, column)
         setattr(self, column, value+cnt)
@@ -38,9 +46,14 @@ class Session(Base):
     __tablename__ = 'session'
 
     site = db.Column(db.String, nullable=False, default='')
+    user_id = db.Column(db.String)
     session_token = db.Column(db.String)
     headers = db.Column(db.String)
     cookies = db.Column(db.String)
+    account = db.Column(db.String)
+    password = db.Column(db.String)
+    area = db.Column(db.String)
+    platform = db.Column(db.String)
 
 
 class Comment(Base):

@@ -9,6 +9,7 @@ from flask_admin.model import typefmt
 from project.server.models import db
 from project.server.models import Comment, Task, Session
 
+
 def datetime_formatter(view, value):
     return value.strftime('%Y-%m-%d %H:%M')
 
